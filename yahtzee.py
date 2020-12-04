@@ -1,3 +1,5 @@
+from typing import Union
+
 def HELP():
 
     """
@@ -66,7 +68,7 @@ def roll_dice(number_dice: int) -> list:
     Roll a set of six sided di and return a list of the
     rolled numbers.
 
-    :param number_dice: Number of dice you wish to roll.
+    :param number_dice:  Number of dice you wish to roll.
     :precondition:       The argument <number_dice> must be
                          between 1 and 5 (inclusive).
     :postcondition:      Will return a list of length <number_dice>
@@ -82,8 +84,7 @@ def create_player(name: str, scorecard: dict) -> dict:
     """
     Create a player for the game.
 
-    Create a player with attributes: dice_held, roll_number
-    scorecard, and name.
+    Create a player with attributes: dice_held scorecard, and name.
 
     :param name:        Name of the player.
     :param scorecard:   An empty scorecard.
@@ -98,7 +99,7 @@ def create_player(name: str, scorecard: dict) -> dict:
     pass
 
 
-def check_multiple_di(roll: list, repetition: int) -> list:
+def check_multiple_di(roll: list, repetition: int) -> int:
 
     """
     Check for multiple of the same di in a roll.
@@ -120,7 +121,7 @@ def check_multiple_di(roll: list, repetition: int) -> list:
     pass
 
 
-def check_straight(roll: list, size='small') -> list:
+def check_straight(roll: list, size='small') -> int:
 
     """
     Check for straight.
@@ -144,7 +145,7 @@ def check_straight(roll: list, size='small') -> list:
     pass
 
 
-def check_number(roll: list, value: int) -> list:
+def check_number(roll: list, value: int) -> int:
 
     """
     Check for collection of number.
@@ -165,12 +166,12 @@ def check_number(roll: list, value: int) -> list:
     pass
 
 
-def check_full_house(roll: list) -> list:
+def check_full_house(roll: list) -> int:
 
     """
     Check for a full-house and returns points.
 
-    :param roll: A list of random numbers.
+    :param roll:    A list of random numbers.
     :precondition:  The argument <roll> must be a list of
                     number between 1 and 6.
     :postcondition: Will perform pattern recognition
@@ -221,15 +222,35 @@ def turn(player: dict):
     pass
 
 
-def pluck_dice(roll: list, desired_dice: list) -> list:
+def pluck_dice(player: dict, roll: list, desired_dice: str) -> list:
 
     """
     Pull dice from roll and pass to player.
 
+    :param player:          A yahtzee player (dict).
     :param roll:            A list of random numbers.
     :param desired_dice:    Dice you wish to pluck from <roll>
     :precondition:          The argument <roll> must be a list of
                             number between 1 and 6.
+    :postcondition:         Will place <desired_dice> in a player's
+                            attribute "held_dice".
+    :return:                A subset of numbers from <roll>.
+    """
+
+    pass
+
+
+def remove_dice(player: dict, dice_selection: str):
+
+    """
+    Pull dice from held dice.
+
+    :param player:          A yahtzee player (dict).
+    :param dice_selection:  Dice you wish to remove from player's
+                            held dice.
+    :precondition:          The argument <dice_selection> must be a
+                            space delimited string of numbers between
+                            1 and 6 inclusive.
     :postcondition:         Will place <desired_dice> in a player's
                             attribute "held_dice".
     :return:                A subset of numbers from <roll>.
@@ -249,16 +270,18 @@ def show_score(player: dict) -> list:
     pass
 
 
-def add_score(player: dict, field: str, score: int):
+def add_score(player: dict, field: str, score: Union[int, str]):
 
     """
     Add score to player scorecard.
 
+    Player can also "scratch" a score if no options are available.
+
+    :param player:  A yahtzee player (dict).
     :param score:   Score to submit to scorecard.
     :param field:   Score field you wish to update.
     :precondition:  Argument <field> must be a valid scorecard key.
     :postcondition: Will update the player's current score.
-    :param player:  A yahtzee player (dict).
     """
 
     pass

@@ -36,6 +36,15 @@ class TestCheckNumber(unittest.TestCase):
         test_roll = [1, 1, 1, 1, 1]
 
         result = check_number(test_roll, 1)
-        expected = 2
+        expected = 5
+
+        self.assertEqual(result, expected)
+
+    def test_check_number_ones_no_ones(self):
+
+        test_roll = [6, 6, 6, 6, 6]
+
+        result = check_number(test_roll, 1)
+        expected = 0
 
         self.assertEqual(result, expected)
