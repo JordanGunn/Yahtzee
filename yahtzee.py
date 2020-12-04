@@ -58,7 +58,7 @@ def yahtzee():
     pass
 
 
-def roll_dice(number_dice_: int) -> list:
+def roll_dice(number_dice: int) -> list:
 
     """
     Roll a set of dice.
@@ -66,7 +66,7 @@ def roll_dice(number_dice_: int) -> list:
     Roll a set of six sided di and return a list of the
     rolled numbers.
 
-    :param number_dice_: Number of dice you wish to roll.
+    :param number_dice: Number of dice you wish to roll.
     :precondition:       The argument <number_dice> must be
                          between 1 and 5 (inclusive).
     :postcondition:      Will return a list of length <number_dice>
@@ -98,34 +98,43 @@ def create_player(name: str, scorecard: dict) -> dict:
     pass
 
 
-def check_multiple_di(roll: list, value: int) -> list:
+def check_multiple_di(roll: list, repetition: int) -> list:
 
     """
     Check for multiple of the same di in a roll.
 
-    :param roll:    A list of random numbers
-    :param value:   The repeated value to search for.
-    :precondition:  The argument <roll> must be a list of
-                    number between 1 and 6.
-    :postcondition: Will perform pattern recognition
-                    to detect multiple recurring die
-                    in a roll.
-    :return:        Regex match (list).
+    Intended to be used to search for repetition of 3 or greater and
+    returns points. If <repetition> number == 5, and a match is
+    successful (ie yahtzee), function will always return 50.
+
+    :param roll:         A list of random numbers
+    :param repetition:   The repeated value to search for.
+    :precondition:       The argument <roll> must be a list of
+                         number between 1 and 6.
+    :postcondition:      Will perform pattern recognition
+                         to detect multiple recurring die
+                         in a roll.
+    :return:             Regex match (list).
     """
 
     pass
 
 
-def check_straight(roll: list) -> list:
+def check_straight(roll: list, size='small') -> list:
 
     """
     Check for straight.
 
-    Checks for small or large straight.
+    Checks for small or large straight and returns points.
+    Keyword argument <size> is set to small by default, but
+    can be changed to 'large' to search for a large straight.
 
     :param roll:    A list of random numbers.
-    :precondition:  The argument <roll> must be a list of
-                    number between 1 and 6.
+    :param size:    'small' or 'large'
+    :precondition:  > The argument <roll> must be a list of
+                      numbers between 1 and 6.
+                    > User must pass 'small' or 'large' to
+                      kwarg <size>.
     :postcondition: Will perform pattern recognition
                     to detect a straight of die
                     in a roll (small or large).
@@ -140,7 +149,8 @@ def check_number(roll: list, value: int) -> list:
     """
     Check for collection of number.
 
-    Checks for one or more of a specific number.
+    Checks for one or more of a specific number
+    and returns points.
 
     :param roll:    A list of random numbers.
     :param value:   The value to search for.
@@ -158,14 +168,14 @@ def check_number(roll: list, value: int) -> list:
 def check_full_house(roll: list) -> list:
 
     """
-    Check for a full-house.
+    Check for a full-house and returns points.
 
     :param roll: A list of random numbers.
     :precondition:  The argument <roll> must be a list of
                     number between 1 and 6.
     :postcondition: Will perform pattern recognition
                     to detect a full house in a roll.
-    :return:     Regex match (list).
+    :return:        Regex match (list).
     """
 
     pass
