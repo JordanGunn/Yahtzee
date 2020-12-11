@@ -113,16 +113,7 @@ def yahtzee():
     Front-end function.
     """
 
-    players_done = []
-    players = []
-    number_of_players = ""
-
-    while not number_of_players.isnumeric():
-        number_of_players = input("How many players?:\t")
-
-    for player in range(1, int(number_of_players) + 1):
-        name = input(f'What is the name of player {player}?:\t')
-        players.append(create_player(name))
+    players = start_game()
 
     cycle_players = itertools.cycle(players)
 
@@ -133,6 +124,24 @@ def yahtzee():
         # execute turn
         if is_player_done(player):
             players_done.append(get_final_score(player))
+
+
+def start_game():
+
+    """
+    Get players and start the game.
+
+    Request player names and instantiate yahtzee player objects.
+    """
+
+    players = []
+    number_of_players = ""
+    while not number_of_players.isnumeric():
+        number_of_players = input("How many players?:\t")
+    for player in range(1, int(number_of_players) + 1):
+        name = input(f'What is the name of player {player}?:\t')
+        players.append(create_player(name))
+    return players
 
 
 def run_command(command: list, player: dict):
