@@ -113,8 +113,8 @@ def yahtzee():
     Front-end function.
     """
 
+    players_done = []
     players = start_game()
-
     cycle_players = itertools.cycle(players)
 
     while len(players_done) != len(players):
@@ -144,19 +144,46 @@ def start_game():
     return players
 
 
-def run_command(command: list, player: dict):
-
+def run_command(command: list, player: dict, roll: list):
     """
-    Execute command from yahtzee prompt.
+    Run user input command.
 
-    Copied and adapted from Assigment 2: books.py
+    Copied and adapted from Assignment 2: Books.py
+    Determine user input command to run
+    by checking against logical expressions.
 
-    :param command:
-    :param player:
-    :return:
+    :param command: User input command.
+    :param player:  A yahtzee player object.
+    :param roll:    A list of ints between 1 and 6.
+    :precondition:  Input must be a valid yahtzee command
+                    as list of strings.
+    :postcondition: Execute the users input command
+                    in the yahtzee program.
     """
 
-    pass
+    # user specifies 'pluck' command
+    if command[0] == 'pluck':
+        pluck_dice(player, roll, command[1])
+
+    # user specifies 'remove' command
+    if command[0] == 'remove':
+        remove_dice(player, roll, command[1])
+
+    # user specifies 'submit' command
+    if command[0] == "submit":
+        submit_score(player, command[1], get_available_scores(roll, player))
+
+    # user specifies 'scratch' command
+    if command[0] == "scratch":
+        submit_score(player, command[1], get_available_scores(roll, player, scratch=True))
+
+    # user specifies 'quit' command
+    if command[0] == 'quit':
+        quit('Thanks for playing!')
+
+    # user specifies 'quit' command
+    if command[0] == 'help':
+        HELP()
 
 
 def roll_dice(number_dice: int) -> list:
@@ -541,7 +568,8 @@ def turn(player: dict):
     :param player: A yahtzee player (dict).
     """
 
-    pass
+    # turn_count = 0
+    # roll = roll_dice()
 
 
 def format_user_input(command_string: str) -> list:
