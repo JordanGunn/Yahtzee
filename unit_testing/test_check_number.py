@@ -18,7 +18,7 @@ class TestCheckNumber(unittest.TestCase):
         test_roll = [1, 2, 3, 4, 5]
 
         result = check_number(test_roll, 1)
-        expected = 6
+        expected = 1
 
         self.assertEqual(result, expected)
 

@@ -282,8 +282,7 @@ def check_number(roll: list, value: int) -> int:
     Check for collection of number.
 
     Copied and adapted from Lab06: Regex.
-    Checks for one or more of a specific number
-    and returns points.
+    Checks for one or more of a specific number.
 
     :param roll:    A list of random numbers.
     :param value:   The value to search for.
@@ -301,7 +300,24 @@ def check_number(roll: list, value: int) -> int:
     10
     """
 
-    pass
+    # cast to string and sort for good measure
+    dice = roll_to_string(sorted(roll))
+
+    # create regex string and compile
+    number_regex_string = f'{value}' + '{,5}'
+    number_regex = re.compile(number_regex_string)
+
+    # look for match
+    number_find = number_regex.findall(dice)
+
+    if number_find:
+        # convert numbers back to ints
+        number_find_ints = [int(number) for number in "".join(number_find)]
+        # get the sum
+        return sum(number_find_ints)
+
+    else:
+        return 0
 
 
 def check_full_house(roll: list) -> int:
