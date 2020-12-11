@@ -24,7 +24,21 @@ def MENU():
     :return: command prompt ('>>>')
     """
 
-    pass
+    print(
+        '====================================================',
+        'Press "enter" to roll or choose from the following options:\n',
+        f'[1] "{VALID_INPUT()[0]}"\tPluck dice from roll.',
+        f'[2] "{VALID_INPUT()[1]}"\tRemove held dice.',
+        f'[3] "{VALID_INPUT()[2]}"\tSubmit score.',
+        f'[4] "{VALID_INPUT()[3]}"\tScratch score.',
+        f'[5] "{VALID_INPUT()[4]}"\tSee usage examples.',
+        f'[6] "{VALID_INPUT()[5]}"\tQuit the game.',
+        '====================================================',
+        sep="\n",
+        end="\n"
+    )
+
+    return '>>>\t'
 
 
 def HELP():
@@ -96,6 +110,21 @@ def yahtzee():
     Run the yahtzee game.
 
     Front-end function.
+    """
+
+    pass
+
+
+def run_command(command: list, player: dict):
+
+    """
+    Execute command from yahtzee prompt.
+
+    Copied and adapted from Assigment 2: books.py
+
+    :param command:
+    :param player:
+    :return:
     """
 
     pass
@@ -481,21 +510,6 @@ def turn(player: dict):
     Simulates a player's "turn" in yahtzee.
 
     :param player: A yahtzee player (dict).
-    """
-
-    pass
-
-
-def run_command(command: list, player: dict):
-
-    """
-    Execute command from yahtzee prompt.
-
-    Copied and adapted from Assigment 2: books.py
-
-    :param command:
-    :param player:
-    :return:
     """
 
     pass
