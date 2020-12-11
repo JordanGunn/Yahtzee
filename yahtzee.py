@@ -745,7 +745,12 @@ def is_turn_over(command: list) -> bool:
     False
     """
 
-    return (command[0] == "scratch") or (command[0] == "submit")
+    turn_over = (
+        ((command[0] == "scratch") or (command[0] == "submit")) and
+        len(command) > 1
+    )
+
+    return turn_over
 
 
 def is_invalid_syntax(command: list) -> bool:
