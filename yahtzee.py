@@ -600,9 +600,6 @@ def turn(player: dict):
     turn_count = 0
     roll = roll_dice(5)
 
-    # get the input command and parse
-    command = format_user_input(input(MENU()).strip())
-
     while turn_count != 3:
 
         display_player_state(player, roll, turn_count)
