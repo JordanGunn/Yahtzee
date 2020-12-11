@@ -458,7 +458,19 @@ def pluck_dice(player: dict, roll: list, desired_dice: str):
     :postcondition:         Place <desired_dice> in a player's "HELD_DICE".
     """
 
-    pass
+    # convert list of ints to list of chars
+    dice = list(roll_to_string(roll))
+    # create list of chars from desired dice
+    desired_dice_list = sorted(desired_dice.split(" "))
+
+    # pluck dice from roll, convert back to int
+    plucked = [
+        int(dice.pop(dice.index(die))) for die in desired_dice_list if die in dice
+    ]
+
+    [roll.remove(pluck) for pluck in plucked]
+
+    player["HELD_DICE"] += plucked
 
 
 def remove_dice(player: dict, roll: list, desired_dice: str):
