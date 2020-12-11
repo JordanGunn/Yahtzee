@@ -902,3 +902,11 @@ def get_winner(players_done: list) -> dict:
     winner = [player for player in players_done if player["final_score"] == max_score]
 
     return winner[0]
+
+
+def main():
+    yahtzee()
+
+
+if __name__ == "__main__":
+    main()
