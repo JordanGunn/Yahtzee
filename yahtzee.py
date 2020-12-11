@@ -600,29 +600,27 @@ def turn(player: dict):
     turn_count = 0
     roll = roll_dice(5)
 
+    # get the input command and parse
+    command = format_user_input(input(MENU()).strip())
+
     while turn_count != 3:
 
-        # get the input command and parse
+        display_player_state(player, roll, turn_count)
         command = format_user_input(input(MENU()).strip())
 
-        # check for invalid syntax
         if is_invalid_syntax(command):
             print("\nINVALID COMMAND\n")
 
-        # check if player ends turn prematurely
         elif is_turn_over(command):
             run_command(command, player, roll)
             player["HELD_DICE"], turn_count = [], 3
 
-        # check if player is out of moves and hasn't ended turn
         elif turn_count == 2 and not is_turn_over(command):
             pluck_dice(player, roll, " ".join(roll_to_string(roll)))
 
-        # commands do not cause turn conditions to change
         elif command[0] in ["help", "pluck", "remove"]:
             run_command(command, player, roll)
 
-        # user has rolled again
         elif command[0] == "":
             roll = roll_dice(5 - len(player["HELD_DICE"]))
             turn_count += 1
@@ -648,6 +646,14 @@ def format_user_input(command_string: str) -> list:
     ["submit", "ones"]
     """
 
+    # parse the command line input
+    command_list = command_string.strip().lower().split(' ')          # create list of args
+    if len(command_list) > 1:                                         # check args length
+        command_list[1] = " ".join(command_list[1:])                  # join anything past arg 3
+        [command_list.remove(string) for string in command_list[2:]]  # remove extremities in args
+
+    return command_list
+
 
 def pluck_dice(player: dict, roll: list, desired_dice: str):
 
@@ -661,18 +667,19 @@ def pluck_dice(player: dict, roll: list, desired_dice: str):
     :postcondition:         Place <desired_dice> in a player's "HELD_DICE".
     """
 
-    # convert list of ints to list of chars
+    # convert desired dice to list of ints
     dice = list(roll_to_string(roll))
-    # create list of chars from desired dice
+    #
     desired_dice_list = sorted(desired_dice.split(" "))
 
-    # pluck dice from roll, convert back to int
+    # pluck dice from rolled dice
     plucked = [
         int(dice.pop(dice.index(die))) for die in desired_dice_list if die in dice
     ]
 
     [roll.remove(pluck) for pluck in plucked]
 
+    # give plucked dice to player
     player["HELD_DICE"] += plucked
 
 
@@ -907,7 +914,7 @@ def get_winner(players_done: list) -> dict:
 def display_player_state(player: dict, roll: list, turn_number: int):
 
     """
-    Diplay the player's current state during a turn.
+    Display the player's current state during a turn.
 
     :param player:      A yahtzee player object.
     :param roll:        A list of ints between 1 and 6 inclusive
