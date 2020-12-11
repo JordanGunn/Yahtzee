@@ -260,8 +260,6 @@ def check_large_straight(roll: list) -> int:
     0
     """
 
-    pass
-
 
 def check_number(roll: list, value: int) -> int:
 
