@@ -1,12 +1,12 @@
 import unittest
-from ..yahtzee import get_available_scores
+from yahtzee import get_available_scores
 
 
 class TestGetAvailableScores(unittest.TestCase):
 
     def test_get_available_scores_from_empty_held_dice(self):
 
-        test_roll = [1, 1, 3, 4, 3]
+        test_roll = [1, 1, 3, 3, 4]
 
         player = {
             'name': 'Jordan', 'dice_held': [],
@@ -29,10 +29,9 @@ class TestGetAvailableScores(unittest.TestCase):
         test_roll = []
 
         player = {
-            'name': 'Jordan', 'dice_held': [1, 1, 3, 4, 3],
+            'name': 'Jordan', 'dice_held': [1, 1, 3, 3, 4],
             'scorecard': {
                 'ones': 0,
-                'twos': 0,
                 'threes': 0,
                 'fours': 0
             }
@@ -48,12 +47,12 @@ class TestGetAvailableScores(unittest.TestCase):
         test_roll = []
 
         player = {
-            'name': 'Jordan', 'dice_held': [1, 1, 3, 4, 3],
+            'name': 'Jordan', 'dice_held': [1, 1, 3, 3, 4],
             'scorecard': {
                 'ones': 3,
-                'twos': 6,
                 'threes': 9,
-                'fours': 12
+                'fours': 12,
+                'chance': 26
             }
         }
 
@@ -67,7 +66,7 @@ class TestGetAvailableScores(unittest.TestCase):
         test_roll = [1, 1, 3]
 
         player = {
-            'name': 'Jordan', 'dice_held': [4, 3],
+            'name': 'Jordan', 'dice_held': [3, 4],
             'scorecard': {
                 'ones': 0,
                 'twos': 0,
@@ -106,8 +105,9 @@ class TestGetAvailableScores(unittest.TestCase):
         test_roll = [4, 4]
 
         player = {
-            'name': 'Jordan', 'dice_held': [4, 4, 3],
+            'name': 'Jordan', 'dice_held': [3, 4, 4],
             'scorecard': {
+                'threes': 0,
                 'fours': 16,
                 'full_house': 0,
                 'three_of_a_kind': 0,
@@ -117,26 +117,6 @@ class TestGetAvailableScores(unittest.TestCase):
         }
 
         result = get_available_scores(test_roll, player)
-        expected = {'three_of_a_kind': 19, 'four_of_a_kind': 19}
-
-        self.assertEqual(result, expected)
-
-    def test_get_available_scores_fields_filled(self):
-
-        test_roll = [5, 5]
-
-        player = {
-            'name': 'Jordan', 'dice_held': [5, 5, 3],
-            'scorecard': {
-                'fives': 20,
-                'full_house': 0,
-                'three_of_a_kind': 0,
-                'four_of_a_kind': 0,
-                'yahtzee': 0
-            }
-        }
-
-        result = get_available_scores(test_roll, player)
-        expected = {'three_of_a_kind': 19, 'four_of_a_kind': 19}
+        expected = {'threes': 3, 'three_of_a_kind': 19, 'four_of_a_kind': 19}
 
         self.assertEqual(result, expected)

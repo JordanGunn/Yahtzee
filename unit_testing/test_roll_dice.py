@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from ..yahtzee import roll_dice
+from yahtzee import roll_dice
 
 
 class TestRollDice(unittest.TestCase):

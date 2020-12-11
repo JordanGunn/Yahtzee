@@ -1,12 +1,12 @@
 import unittest
-from ..yahtzee import check_number
+from yahtzee import check_number
 
 
 class TestCheckNumber(unittest.TestCase):
 
     def test_check_number_ones(self):
 
-        test_roll = [2, 6, 1, 3, 4]
+        test_roll = [1, 2, 4, 5, 6]
 
         result = check_number(test_roll, 1)
         expected = 1
@@ -15,7 +15,7 @@ class TestCheckNumber(unittest.TestCase):
 
     def test_check_number_sixes(self):
 
-        test_roll = [2, 6, 1, 3, 4]
+        test_roll = [1, 2, 3, 4, 5]
 
         result = check_number(test_roll, 1)
         expected = 6
@@ -24,7 +24,7 @@ class TestCheckNumber(unittest.TestCase):
 
     def test_check_number_ones_multiple(self):
 
-        test_roll = [2, 1, 1, 3, 4]
+        test_roll = [1, 1, 2, 3, 4]
 
         result = check_number(test_roll, 1)
         expected = 2
