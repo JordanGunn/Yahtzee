@@ -393,7 +393,47 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
     {"yahtzee": 50}
     """
 
-    pass
+    # combine held_dice and rolled dice
+    dice = sorted(player["HELD_DICE"] + roll)
+
+    # calculate top scoresheet (1s through 6s)
+    scoresheet_top = [check_number(dice, number) for number in range(1, 7)]
+
+    # calculate bottom scoresheet
+    scoresheet_bottom = [
+        check_multiple_die(dice, 3), check_multiple_die(dice, 4), check_full_house(dice),
+        check_small_straight(dice), check_large_straight(dice), check_multiple_die(dice, 5),
+        sum(dice)
+    ]
+
+    calculated_scores = scoresheet_top + scoresheet_bottom
+
+    calc_and_keys = zip(calculated_scores, player["SCORECARD"].keys())
+
+    if scratch:
+        available_scores = {key: "scratch" for key in player["SCORECARD"] if player["SCORECARD"][key] == 0}
+
+    # else:
+        # available_scores = {key:value for value, key in calc_and_keys if }
+
+
+def is_valid_score(player, key, score):
+
+    """
+    Determine if score is valid to display.
+
+    :param player: A yahtzee player object.
+    :param key: A key in a player's scorecard.
+    :param score: A score value
+    :return: True or False (bool).
+    """
+
+    valid_score = (
+        (player["SCORECARD"][key] != "scratch" and score != 0) and
+        player["SCORECARD"][key] == 0
+    )
+
+    return valid_score
 
 
 def turn(player: dict):
@@ -560,7 +600,7 @@ def is_valid_syntax(command: list) -> bool:
     """
 
 
-def add_score(player: dict, field: str, score: Union[int, str]):
+def submit_score(player: dict, field: str, score: Union[int, str]):
 
     """
     Add score to player scorecard.
