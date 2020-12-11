@@ -260,6 +260,21 @@ def check_large_straight(roll: list) -> int:
     0
     """
 
+    # cast to string and sort for good measure
+    dice = roll_to_string(sorted(roll))
+
+    # convert di constant to a string
+    die_string = [str(die) for die in DIE()]
+
+    # compile regex object
+    straight_check = re.compile(dice)
+
+    # search and return
+    if straight_check.search("".join(die_string)):
+        return FIXED_SCORES()["LARGE_STRAIGHT"]
+    else:
+        return 0
+
 
 def check_number(roll: list, value: int) -> int:
 
