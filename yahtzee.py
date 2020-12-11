@@ -479,14 +479,21 @@ def remove_dice(player: dict, roll: list, desired_dice: str):
     Pull dice from held dice.
 
     :param player:          A yahtzee player (dict).
-    :param roll:            A list of random numbers
+    :param roll:            A list of random ints
     :param desired_dice:    Dice you wish to remove from player's held dice.
     :precondition:          <desired_dice> must be a space delimited string of
                             numbers between 1 and 6 inclusive.
     :postcondition:         Will place <desired_dice> back into <roll>
     """
 
-    pass
+    # cast elements to integers
+    desired_dice_int = sorted([int(die) for die in desired_dice.split(" ")])
+
+    # remove from player's held dice
+    [player["HELD_DICE"].remove(die) for die in desired_dice_int if die in player["HELD_DICE"]]
+
+    # add back to roll
+    [roll.append(die) for die in desired_dice_int]
 
 
 def is_next_turn(command: list) -> bool:
