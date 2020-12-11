@@ -1,5 +1,6 @@
 import unittest
 from yahtzee import create_player
+from yahtzee import SCORECARD
 
 
 class TestCreatePlayer(unittest.TestCase):
@@ -13,7 +14,7 @@ class TestCreatePlayer(unittest.TestCase):
         expected = {
             "NAME": "jordan",
             "HELD_DICE": [],
-            "SCORECARD": {"ones": 0, "twos": 0}
+            "SCORECARD": SCORECARD()
         }
 
         self.assertEqual(result, expected)
