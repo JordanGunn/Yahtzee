@@ -205,7 +205,38 @@ def check_small_straight(roll: list) -> int:
     0
     """
 
-    pass
+    # get min, max from roll
+    dice_min, dice_max = str(min(roll)), str(max(roll))
+
+    # remove internal repetition, cast to string
+    dice = roll_to_string(sorted(list(set(roll))))
+
+    # convert die constant to a string for regex
+    die_string = [str(die) for die in DIE()]
+
+    # compile regex object and search
+    straight_check = re.compile(dice)
+    # search roll with internal repetition
+    if straight_check.search("".join(die_string)) and len(dice) == 4:
+        return FIXED_SCORES()["SMALL_STRAIGHT"]
+
+    # search roll with 5 dice non repeating
+    if len(dice) > 4:
+
+        # remove max and min to check for "hanging" numbers
+        min_straight_check = re.compile(dice.replace(dice_min, ""))
+        max_straight_check = re.compile(dice.replace(dice_max, ""))
+
+        # search
+        min_find = min_straight_check.search("".join(die_string))
+        max_find = max_straight_check.search("".join(die_string))
+
+        # get the points
+        if min_find or max_find:
+            return FIXED_SCORES()["SMALL_STRAIGHT"]
+
+    else:
+        return 0
 
 
 def check_large_straight(roll: list) -> int:
