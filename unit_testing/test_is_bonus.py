@@ -6,7 +6,7 @@ class TestIsBonus(unittest.TestCase):
 
     def test_is_bonus_achieved(self):
 
-        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 63}}
+        test_player = {"NAME": "Jordan", "SCORECARD": {"sixes": 63}}
 
         result = is_bonus(test_player)
         expected = True
@@ -15,7 +15,7 @@ class TestIsBonus(unittest.TestCase):
 
     def test_is_bonus_not_achieved(self):
 
-        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 35}}
+        test_player = {"NAME": "Jordan", "SCORECARD": {"sixes": 35}}
 
         result = is_bonus(test_player)
         expected = False
@@ -24,7 +24,7 @@ class TestIsBonus(unittest.TestCase):
 
     def test_is_bonus_achieved_sum_of_scores(self):
 
-        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 35, "twos": 35}}
+        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 35, "sixes": 35}}
 
         result = is_bonus(test_player)
         expected = True
@@ -33,7 +33,7 @@ class TestIsBonus(unittest.TestCase):
 
     def test_is_bonus_not_achieved_sum_of_scores(self):
 
-        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 1, "twos": 2}}
+        test_player = {"NAME": "Jordan", "SCORECARD": {"ones": 1, "sixes": 2}}
 
         result = is_bonus(test_player)
         expected = False

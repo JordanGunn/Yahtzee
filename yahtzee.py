@@ -1,4 +1,3 @@
-from typing import Union
 import random
 import re
 
@@ -664,7 +663,16 @@ def is_bonus(player: dict) -> bool:
     True
     """
 
-    pass
+    # get the index of last item in upper card
+    end_of_upper_card = list(player["SCORECARD"].keys()).index("sixes")
+
+    # get the upper score values
+    upper_score = list(player["SCORECARD"].values())[0:end_of_upper_card+1]
+
+    # get the sum
+    upper_sum = sum([score for score in upper_score if str(score) != "scratch"])
+
+    return upper_sum >= 63
 
 
 def is_player_done(player: dict) -> bool:
