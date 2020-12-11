@@ -1,5 +1,6 @@
 from typing import Union
 import random
+import re
 
 
 def VALID_INPUT():
@@ -102,6 +103,25 @@ def roll_dice(number_dice: int) -> list:
     return roll
 
 
+def roll_to_string(roll: list) -> str:
+
+    """
+    Convert dice roll to string.
+
+    Convert roll to string for regex searching.
+
+    :param roll:    a list of ints between 1 and 6 inclusive.
+    :precondition:  <roll> must be generated from roll_dice().
+    :postcondition: Will generate a joined string of ints in roll.
+    :return:        roll as a string
+
+    """
+
+    casted_die = [str(die) for die in roll]
+
+    return "".join(casted_die)
+
+
 def create_player(name: str) -> dict:
 
     """
@@ -143,7 +163,26 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     50
     """
 
-    pass
+    # convert roll list to string for regex
+    dice = roll_to_string(roll)
+
+    # build regex argument as string
+    repeating_regex_str = r'([1-6])(\1{' + str(repetition-1) + r'})'
+
+    # compile regex object and search
+    repeating = re.compile(repeating_regex_str)
+    repeating_find = repeating.findall(dice)
+
+    # if repetition equals 5, YAHTZEE
+    if repeating_find and repetition == 5:
+        return FIXED_SCORES()["YAHTZEE"]
+
+    # four or three of a kind
+    if repeating_find:
+        return sum(roll)
+
+    else:
+        return 0
 
 
 def check_small_straight(roll: list) -> int:
