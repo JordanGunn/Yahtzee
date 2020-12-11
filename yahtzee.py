@@ -11,7 +11,8 @@ def VALID_INPUT():
     Copied an adapted from Assignment 2: books.py
     """
 
-    return ['pluck', 'remove', 'submit', 'scratch', 'help', 'quit']
+    # last element represents "enter" at input()
+    return ['pluck', 'remove', 'submit', 'scratch', 'help', 'quit', '']
 
 
 def MENU():
@@ -134,13 +135,19 @@ def start_game():
     Request player names and instantiate yahtzee player objects.
     """
 
+    # pre-loop conditions
     players = []
     number_of_players = ""
+
+    # ask for players until number is entered
     while not number_of_players.isnumeric():
         number_of_players = input("How many players?:\t")
+
+    # generate yahtzee player objects
     for player in range(1, int(number_of_players) + 1):
         name = input(f'What is the name of player {player}?:\t')
         players.append(create_player(name))
+
     return players
 
 
@@ -568,18 +575,37 @@ def turn(player: dict):
     :param player: A yahtzee player (dict).
     """
 
+    # pre-loop conditions
     turn_count = 0
-    roll = roll_dice()
+    roll = roll_dice(5)
 
     while turn_count != 3:
 
+        # get the input command and parse
         command = format_user_input(input(MENU()).strip())
 
+        # check for invalid syntax
         if is_invalid_syntax(command):
             print("\nINVALID COMMAND\n")
 
-        elif:
-            pass
+        # check if player ends turn prematurely
+        elif is_turn_over(command):
+            run_command(command, player, roll)
+            player["HELD_DICE"], turn_count = [], 3
+
+        # check if player is out of moves and hasn't ended turn
+        elif turn_count == 2 and not is_turn_over(command):
+            pluck_dice(player, roll, " ".join(roll_to_string(roll)))
+
+        # commands do not cause turn conditions to change
+        elif command[0] in ["help", "pluck", "remove"]:
+            run_command(command, player, roll)
+
+        # user has rolled again
+        elif command[0] == "":
+            roll = roll_dice(5 - len(player["HELD_DICE"]))
+            turn_count += 1
+
 
 
 
