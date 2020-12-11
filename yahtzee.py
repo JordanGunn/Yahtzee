@@ -45,6 +45,10 @@ def FIXED_SCORES() -> dict:
     :return: FIXED_SCORES
     """
 
+    fixed_scores = {"FULL_HOUSE": 25, "SMALL_STRAIGHT": 30, "LARGE_STRAIGHT": 40, "YAHTZEE": 50}
+
+    return fixed_scores
+
 
 def SCORECARD() -> dict:
 
@@ -57,7 +61,14 @@ def SCORECARD() -> dict:
     :return: SCORECARD
     """
 
-    pass
+    scorecard = {
+        "ones": 0, "twos": 0, "threes": 0, "fours": 0, "fives": 0, "sixes": 0,
+        "three of a kind": 0, "four of a kind": 0, "full house": 0,
+        "small_straight": 0, "large straight": 0,
+        "yahtzee": 0, "chance": 0
+    }
+
+    return scorecard
 
 
 def yahtzee():
