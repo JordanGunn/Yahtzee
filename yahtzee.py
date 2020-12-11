@@ -694,7 +694,19 @@ def is_player_done(player: dict) -> bool:
     False
     """
 
-    pass
+    # start counter for filled scorecard fields
+    fill_count = 0
+
+    # get the scores
+    scores = player["SCORECARD"].values()
+
+    for score in scores:
+        # if score is scratch or not zero
+        if str(score) == "scratch" or score > 0:
+            fill_count += 1
+
+    # check if sheet is completely filled
+    return fill_count == len(scores)
 
 
 def get_final_score(player: dict) -> dict:
