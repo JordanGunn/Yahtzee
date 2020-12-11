@@ -393,6 +393,33 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
     {"yahtzee": 50}
     """
 
+    # calculate available scores
+    calculated_scores = calculate_scores(player, roll)
+
+    # zip calculate scores with keys (for shorter dictionary comprehension)
+    calc_and_keys = zip(calculated_scores, player["SCORECARD"].keys())
+
+    if scratch:
+        available_scores = {key: "scratch" for key in player["SCORECARD"] if player["SCORECARD"][key] == 0}
+
+    else:
+        available_scores = {key: value for value, key in calc_and_keys if is_valid_score(player, key, value)}
+
+    return available_scores
+
+
+def calculate_scores(player, roll):
+
+    """
+    Calculate upper and lower scores and return available options.
+
+    :param player:  A yahtzee player object.
+    :param roll:    A list of random ints between 1 and 6.
+    :precondition:  <player> must be yahtzee player object.
+    :postcondition: Will calculate all available scores.
+    :return:        Calculated upper and lower scorecard.
+    """
+
     # combine held_dice and rolled dice
     dice = sorted(player["HELD_DICE"] + roll)
 
@@ -406,15 +433,7 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
         sum(dice)
     ]
 
-    calculated_scores = scoresheet_top + scoresheet_bottom
-
-    calc_and_keys = zip(calculated_scores, player["SCORECARD"].keys())
-
-    if scratch:
-        available_scores = {key: "scratch" for key in player["SCORECARD"] if player["SCORECARD"][key] == 0}
-
-    # else:
-        # available_scores = {key:value for value, key in calc_and_keys if }
+    return scoresheet_top + scoresheet_bottom
 
 
 def is_valid_score(player, key, score):
