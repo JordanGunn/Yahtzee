@@ -67,7 +67,7 @@ def SCORECARD() -> dict:
     scorecard = {
         "ones": 0, "twos": 0, "threes": 0, "fours": 0, "fives": 0, "sixes": 0,
         "three of a kind": 0, "four of a kind": 0, "full house": 0,
-        "small_straight": 0, "large straight": 0,
+        "small straight": 0, "large straight": 0,
         "yahtzee": 0, "chance": 0
     }
 
@@ -169,7 +169,7 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     50
     """
 
-    # convert roll list to string for regex
+    # convert list to string
     dice = roll_to_string(roll)
 
     # build regex argument as string
@@ -183,13 +183,10 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     if repeating_find and repetition == 5:
         return FIXED_SCORES()["YAHTZEE"]
 
-    # four or three of a kind
     if repeating_find:
         return sum(roll)
 
-    # return 0 if no conditions met
     return 0
-
 
 def check_small_straight(roll: list) -> int:
 
@@ -393,11 +390,11 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
     {"yahtzee": 50}
     """
 
-    # calculate available scores
-    calculated_scores = calculate_scores(player, roll)
+    # calculate all available scores
+    score_calc = calculate_scores(player, roll)
 
-    # zip calculate scores with keys (for shorter dictionary comprehension)
-    calc_and_keys = zip(calculated_scores, player["SCORECARD"].keys())
+    # zip keys with calculated scores
+    calc_and_keys = zip(score_calc, player["SCORECARD"].keys())
 
     if scratch:
         available_scores = {key: "scratch" for key in player["SCORECARD"] if player["SCORECARD"][key] == 0}
@@ -420,19 +417,20 @@ def calculate_scores(player, roll):
     :return:        Calculated upper and lower scorecard.
     """
 
-    # combine held_dice and rolled dice
+    # combine held dice and rolled dice
     dice = sorted(player["HELD_DICE"] + roll)
 
-    # calculate top scoresheet (1s through 6s)
+    # calculate top score sheet from dice
     scoresheet_top = [check_number(dice, number) for number in range(1, 7)]
 
-    # calculate bottom scoresheet
+    # calculate bottom score sheet from dice
     scoresheet_bottom = [
         check_multiple_die(dice, 3), check_multiple_die(dice, 4), check_full_house(dice),
         check_small_straight(dice), check_large_straight(dice), check_multiple_die(dice, 5),
         sum(dice)
     ]
 
+    # get the calculated scores
     return scoresheet_top + scoresheet_bottom
 
 
@@ -448,8 +446,8 @@ def is_valid_score(player, key, score):
     """
 
     valid_score = (
-        (player["SCORECARD"][key] != "scratch" and score != 0) and
-        player["SCORECARD"][key] == 0
+            (player["SCORECARD"][key] != "scratch" and score != 0)
+            and (player["SCORECARD"][key] == 0 or player["SCORECARD"][key] >= 50)
     )
 
     return valid_score
