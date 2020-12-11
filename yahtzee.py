@@ -145,7 +145,7 @@ def yahtzee():
         if is_player_done(player):
             players_done.append(get_final_score(player))
 
-        print("Game over! The winner is:\n", get_winner(players_done))
+    print("Game over! The winner is:\n", get_winner(players_done))
 
 
 def start_game():
