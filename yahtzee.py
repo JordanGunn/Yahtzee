@@ -703,28 +703,6 @@ def remove_dice(player: dict, roll: list, desired_dice: str):
     [roll.append(die) for die in desired_dice_int]
 
 
-def is_next_turn(command: list) -> bool:
-
-    """
-    Determine if player's next turn should begin.
-
-    Controls whether or not to increase the
-    turn count in yahtzee.
-
-    :param command:     A list with command and args.
-    :precondition:      Command is a list.
-    :postcondition:     Will determine if player should roll again.
-    :return:            True or False (bool).
-
-    >>> is_next_turn([""])
-    True
-    >>> is_next_turn(["fake"])
-    False
-    >>> is_next_turn(["pluck", "2 2"])
-    False
-    """
-
-
 def is_turn_over(command: list) -> bool:
 
     """
