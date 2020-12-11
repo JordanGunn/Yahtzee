@@ -11,6 +11,8 @@ def VALID_INPUT():
     Copied an adapted from Assignment 2: books.py
     """
 
+    return ['pluck', 'remove', 'submit', 'scratch', 'help', 'quit']
+
 
 def HELP():
 
@@ -136,7 +138,11 @@ def create_player(name: str) -> dict:
     :return:            Player with attributes.
     """
 
-    pass
+    player = {
+        "NAME": name, "HELD_DICE": [], "SCORECARD": SCORECARD()
+    }
+
+    return player
 
 
 def check_multiple_die(roll: list, repetition: int) -> int:
@@ -415,6 +421,8 @@ def run_command(command: list, player: dict):
     :param player:
     :return:
     """
+
+    pass
 
 
 def format_user_input(command_string: str) -> list:
