@@ -568,8 +568,20 @@ def turn(player: dict):
     :param player: A yahtzee player (dict).
     """
 
-    # turn_count = 0
-    # roll = roll_dice()
+    turn_count = 0
+    roll = roll_dice()
+
+    while turn_count != 3:
+
+        command = format_user_input(input(MENU()).strip())
+
+        if is_invalid_syntax(command):
+            print("\nINVALID COMMAND\n")
+
+        elif:
+            pass
+
+
 
 
 def format_user_input(command_string: str) -> list:
@@ -685,11 +697,15 @@ def is_turn_over(command: list) -> bool:
     False
     """
 
+    return (command[0] == "scratch") or (command[0] == "submit")
 
-def is_valid_syntax(command: list) -> bool:
+
+def is_invalid_syntax(command: list) -> bool:
 
     """
     Determine is command at yahtzee prompt is valid.
+
+    Copied and adapted from Assignment 2: books.py
 
     :param command: A list with command and args.
     :precondition:  <command> must be output from format_user_input().
@@ -705,6 +721,12 @@ def is_valid_syntax(command: list) -> bool:
     >>> is_valid_syntax(["fake"])
     False
     """
+
+    invalid_syntax = command[0] not in VALID_INPUT() or (
+                command[0] in VALID_INPUT()[0:4] and len(command) < 2
+            )
+
+    return invalid_syntax
 
 
 def submit_score(player: dict, field: str, available_scores: dict):
