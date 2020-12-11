@@ -74,9 +74,6 @@ def HELP():
     )
 
 
-    pass
-
-
 def DIE() -> list:
 
     """
@@ -144,10 +141,11 @@ def yahtzee():
     while len(players_done) != len(players):
         player = next(cycle_players)
         print(f'\n{player["NAME"]}s turn!\n')
-        pass
-        # execute turn
+        turn(player)
         if is_player_done(player):
             players_done.append(get_final_score(player))
+
+        print("Game over! The winner is:\n", get_winner(players_done))
 
 
 def start_game():
@@ -889,3 +887,18 @@ def get_final_score(player: dict) -> dict:
         final_score += FIXED_SCORES()["UPPER_BONUS"]
 
     return {"NAME": player["NAME"], "final_score": final_score}
+
+
+def get_winner(players_done: list) -> dict:
+
+    """
+    Determine winner of the game.
+
+    :param players_done: A list of player's who are done yahtzee.
+    :return: Winner of the game
+    """
+
+    max_score = max([player["final_score"] for player in players_done])
+    winner = [player for player in players_done if player["final_score"] == max_score]
+
+    return winner[0]
