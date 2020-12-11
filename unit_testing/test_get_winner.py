@@ -2,7 +2,7 @@ import unittest
 from yahtzee import get_winner
 
 
-class TestGetFinalScore(unittest.TestCase):
+class TestGetWinner(unittest.TestCase):
 
     def test_get_winner_two_players(self):
 
