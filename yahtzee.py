@@ -47,7 +47,10 @@ def FIXED_SCORES() -> dict:
     :return: FIXED_SCORES
     """
 
-    fixed_scores = {"FULL_HOUSE": 25, "SMALL_STRAIGHT": 30, "LARGE_STRAIGHT": 40, "YAHTZEE": 50}
+    fixed_scores = {
+        "FULL_HOUSE": 25, "SMALL_STRAIGHT": 30, "LARGE_STRAIGHT": 40,
+        "YAHTZEE": 50, "UPPER_BONUS": 35
+    }
 
     return fixed_scores
 
@@ -361,6 +364,8 @@ def check_full_house(roll: list) -> int:
         pair = dice.replace(three_string[0], "")
         if pair_regex.findall(pair) and not check_multiple_die(roll, 5):
             return FIXED_SCORES()["FULL_HOUSE"]
+
+    # return 0 if no conditions met
     return 0
 
 
@@ -478,8 +483,6 @@ def run_command(command: list, player: dict):
     :param player:
     :return:
     """
-
-
 
     pass
 
@@ -727,5 +730,9 @@ def get_final_score(player: dict) -> dict:
     {"NAME": Jordan, "final_score": 3}
     """
 
-    pass
+    final_score = sum([score for score in player["SCORECARD"].values() if str(score) != "scratch"])
 
+    if is_bonus(player):
+        final_score += FIXED_SCORES()["UPPER_BONUS"]
+
+    return {"NAME": player["NAME"], "final_score": final_score}
