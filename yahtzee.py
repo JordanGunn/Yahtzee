@@ -51,6 +51,29 @@ def HELP():
     Copied and adapted from Assignment 2: books.py
     """
 
+    print(
+        f'[2]\t{VALID_INPUT()[0]} <num1> <num2> <num3> ...',
+        'pluck dice from roll and place in "held dice"',
+        '--------------------------------------------------------------------------------',
+        '\t\t USAGE EXAMPLES --->',
+        '\t\t >>> pluck 1 1 2\n',
+        '--------------------------------------------------------------------------------',
+        f'[2]\t{VALID_INPUT()[1]} <num1> <num2> <num3> ...',
+        'Remove dice from players "held dice"',
+        '--------------------------------------------------------------------------------',
+        '\t\t USAGE EXAMPLES --->',
+        '\t\t >>> remove 3 3 3 \n',
+        '--------------------------------------------------------------------------------',
+        f'[2]\t{VALID_INPUT()[2]} <field>',
+        "Submit score from available fields",
+        '--------------------------------------------------------------------------------',
+        '\t\t USAGE EXAMPLES --->',
+        '\t\t >>> submit twos',
+        '\t\t >>> submit three of a kind \n',
+        sep="\n"
+    )
+
+
     pass
 
 
@@ -605,9 +628,6 @@ def turn(player: dict):
         elif command[0] == "":
             roll = roll_dice(5 - len(player["HELD_DICE"]))
             turn_count += 1
-
-
-
 
 
 def format_user_input(command_string: str) -> list:
