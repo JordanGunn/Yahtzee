@@ -13,6 +13,20 @@ def VALID_INPUT():
     return ['pluck', 'remove', 'submit', 'scratch', 'help', 'quit']
 
 
+def MENU():
+
+    """
+    Print constant MENU.
+
+    Copied and adapted from Assignment 2: book.py
+    Print a list of options at user interface.
+
+    :return: command prompt ('>>>')
+    """
+
+    pass
+
+
 def HELP():
 
     """
