@@ -181,8 +181,8 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     if repeating_find:
         return sum(roll)
 
-    else:
-        return 0
+    # return 0 if no conditions met
+    return 0
 
 
 def check_small_straight(roll: list) -> int:
@@ -235,8 +235,8 @@ def check_small_straight(roll: list) -> int:
         if min_find or max_find:
             return FIXED_SCORES()["SMALL_STRAIGHT"]
 
-    else:
-        return 0
+    # return 0 if no conditions met
+    return 0
 
 
 def check_large_straight(roll: list) -> int:
@@ -272,8 +272,9 @@ def check_large_straight(roll: list) -> int:
     # search and return
     if straight_check.search("".join(die_string)):
         return FIXED_SCORES()["LARGE_STRAIGHT"]
-    else:
-        return 0
+
+    # return 0 if no conditions met
+    return 0
 
 
 def check_number(roll: list, value: int) -> int:
@@ -316,8 +317,8 @@ def check_number(roll: list, value: int) -> int:
         # get the sum
         return sum(number_find_ints)
 
-    else:
-        return 0
+    # return 0 if no conditions met
+    return 0
 
 
 def check_full_house(roll: list) -> int:
@@ -340,7 +341,24 @@ def check_full_house(roll: list) -> int:
     0
     """
 
-    pass
+    # cast to string and sort for good measure
+    dice = roll_to_string(sorted(roll))
+
+    # build three of a kind regex and search
+    three_kind_regex = re.compile(r'([1-6])(\1{2})')
+    three_kind_find = three_kind_regex.findall(dice)
+    three_string = ["".join(find) for find in three_kind_find]
+
+    # build pair regex
+    pair_regex = re.compile(r'([1-6])(\1)')
+
+    # check for 3 of a kind
+    if three_kind_regex.findall(dice):
+        # if three of a kind, and look for pair
+        pair = dice.replace(three_string[0], "")
+        if pair_regex.findall(pair) and not check_multiple_die(roll, 5):
+            return FIXED_SCORES()["FULL_HOUSE"]
+    return 0
 
 
 def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
