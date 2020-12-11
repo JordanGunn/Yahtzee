@@ -904,6 +904,24 @@ def get_winner(players_done: list) -> dict:
     return winner[0]
 
 
+def display_player_state(player: dict, roll: list, turn_number: int):
+
+    """
+    Diplay the player's current state during a turn.
+
+    :param player:      A yahtzee player object.
+    :param roll:        A list of ints between 1 and 6 inclusive
+    :param turn_number: Player's turn number
+    """
+
+    print(f'TURN NUMBER: {turn_number + 1}')
+    print("Current Score: ", get_final_score(player)["final_score"])
+    print("Dice held: ", *player["HELD_DICE"])
+    print("Dice rolled: ", *roll)
+    print("Available Scores: ", get_available_scores(roll, player), sep="")
+    print("Remaining Scores: ", *get_available_scores(roll, player, scratch=True), sep=" | ")
+
+
 def main():
     yahtzee()
 
