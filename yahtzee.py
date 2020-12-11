@@ -793,6 +793,7 @@ def submit_score(player: dict, field: str, available_scores: dict):
 
     # if player submits yahtzee, check for bonus and add score
     if field == "yahtzee" and player['SCORECARD']["yahtzee"]:
+        print("Adding yahtzee bonus of 50 points!")
         player["SCORECARD"][field] += available_scores[field] * 2
 
     # otherwise add the score
