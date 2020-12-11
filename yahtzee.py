@@ -188,6 +188,7 @@ def check_multiple_die(roll: list, repetition: int) -> int:
 
     return 0
 
+
 def check_small_straight(roll: list) -> int:
 
     """
@@ -479,6 +480,8 @@ def run_command(command: list, player: dict):
     :return:
     """
 
+
+
     pass
 
 
@@ -617,21 +620,27 @@ def is_valid_syntax(command: list) -> bool:
     """
 
 
-def submit_score(player: dict, field: str, score: Union[int, str]):
+def submit_score(player: dict, field: str, available_scores: dict):
 
     """
     Add score to player scorecard.
 
     Player can also "scratch" a score if no options are available.
 
-    :param player:  A yahtzee player (dict).
-    :param score:   Score to submit to scorecard.
-    :param field:   Score field you wish to update.
-    :precondition:  <field> must be a valid scorecard key.
-    :postcondition: Update the player's current score.
+    :param player:              A yahtzee player (dict).
+    :param available_scores:    All available scores.
+    :param field:               Score field you wish to update.
+    :precondition:              <field> must be a valid scorecard key.
+    :postcondition:             Update the player's current score.
     """
 
-    pass
+    # if player submits yahtzee, check for bonus and add score
+    if field == "yahtzee" and player['SCORECARD']["yahtzee"]:
+        player["SCORECARD"][field] += available_scores[field] * 2
+
+    # otherwise add the score
+    elif field in available_scores.keys():
+        player["SCORECARD"][field] = available_scores[field]
 
 
 def is_bonus(player: dict) -> bool:
