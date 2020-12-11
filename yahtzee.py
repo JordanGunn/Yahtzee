@@ -1,4 +1,5 @@
 from typing import Union
+import random
 
 
 def VALID_INPUT():
@@ -31,7 +32,7 @@ def DIE() -> list:
     :return: List of values.
     """
 
-    pass
+    return [1, 2, 3, 4, 5, 6]
 
 
 def FIXED_SCORES() -> dict:
@@ -85,7 +86,9 @@ def roll_dice(number_dice: int) -> list:
     :return:             List of rolled di.
     """
 
-    pass
+    roll = sorted([random.randint(min(DIE()), max(DIE())) for _ in range(number_dice)])
+
+    return roll
 
 
 def create_player(name: str) -> dict:
