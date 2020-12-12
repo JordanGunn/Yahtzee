@@ -529,9 +529,11 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
     calc_and_keys = zip(score_calc, player["SCORECARD"].keys())
 
     if scratch:
+        # get all empty fields of player scorecard
         available_scores = {key: "scratch" for key in player["SCORECARD"] if player["SCORECARD"][key] == 0}
 
     else:
+        # get available scores from dice AND player
         available_scores = {key: value for value, key in calc_and_keys if is_valid_score(player, key, value)}
 
     return available_scores
