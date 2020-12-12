@@ -717,7 +717,7 @@ def remove_dice(player: dict, roll: list, desired_dice: str):
     """
 
     # cast elements to integers
-    desired_dice_int = sorted([int(die) for die in desired_dice.split(" ")])
+    desired_dice_int = sorted([int(die) for die in sorted(desired_dice.split(" "))])
 
     # remove from player's held dice
     [player["HELD_DICE"].remove(die) for die in desired_dice_int if die in player["HELD_DICE"]]
@@ -898,6 +898,7 @@ def get_final_score(player: dict) -> dict:
 
     # check for bonus in upper scorecard
     if is_bonus(player):
+        print("Upper scorecard bonus achieved! Adding 35 points!")
         final_score += FIXED_SCORES()["UPPER_BONUS"]
 
     # return final score for player
