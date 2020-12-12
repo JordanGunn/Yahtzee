@@ -566,7 +566,7 @@ def calculate_scores(player, roll):
     return scoresheet_top + scoresheet_bottom
 
 
-def is_valid_score(player, key, score):
+def is_valid_score(player: dict, key: str, score: int):
 
     """
     Determine if score is valid to display.
