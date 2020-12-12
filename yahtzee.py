@@ -579,6 +579,7 @@ def is_valid_score(player: dict, key: str, score: int):
     :return: True or False (bool).
     """
 
+    # check for valid scores to display
     valid_score = (
             (player["SCORECARD"][key] != "scratch" and score != 0)
             and (player["SCORECARD"][key] == 0 or player["SCORECARD"][key] >= 50)
@@ -604,22 +605,30 @@ def turn(player: dict):
 
     while turn_count != 3:
 
+        # get the current status of player
         display_player_state(player, roll, turn_count)
+        # ask for input command
         command = format_user_input(input(MENU()).strip())
 
+        # check for invalid syntax
         if is_invalid_syntax(command):
             print("\nINVALID COMMAND\n")
 
+        # check if turn ends prematurely
         elif is_turn_over(command):
             run_command(command, player, roll)
             player["HELD_DICE"], turn_count = [], 3
 
+        # check if player is on last turn
         elif turn_count == 2 and not is_turn_over(command):
+            # remove dice from roll and give them all to player
             pluck_dice(player, roll, " ".join(roll_to_string(roll)))
 
-        elif command[0] in ["help", "pluck", "remove"]:
+        # commands that do not increase the turn
+        elif command[0] in ["quit", "help", "pluck", "remove"]:
             run_command(command, player, roll)
 
+        # user presses enter
         elif command[0] == "":
             roll = roll_dice(5 - len(player["HELD_DICE"]))
             turn_count += 1
@@ -648,7 +657,7 @@ def format_user_input(command_string: str) -> list:
     # parse the command line input
     command_list = command_string.strip().lower().split(' ')          # create list of args
     if len(command_list) > 1:                                         # check args length
-        command_list[1] = " ".join(command_list[1:])                  # join anything past arg 3
+        command_list[1] = " ".join(command_list[1:])                  # join anything past arg 2
         [command_list.remove(string) for string in command_list[2:]]  # remove extremities in args
 
     return command_list
@@ -745,16 +754,17 @@ def is_invalid_syntax(command: list) -> bool:
     :postcondition: Will check for invalid commands or syntax.
     :return:        True or False (bool)
 
-    >>> is_valid_syntax(["pluck", "2", "2"])
-    False
-    >>> is_valid_syntax(["pluck", "2 2"])
+    >>> is_invalid_syntax(["pluck", "2", "2"])
     True
-    >>> is_valid_syntax(["pluck"])
+    >>> is_invalid_syntax(["pluck", "2 2"])
     False
-    >>> is_valid_syntax(["fake"])
-    False
+    >>> is_invalid_syntax(["pluck"])
+    True
+    >>> is_invalid_syntax(["fake"])
+    True
     """
 
+    # check for incorrect arg length and valid commands for program
     invalid_syntax = command[0] not in VALID_INPUT() or (
                 command[0] in VALID_INPUT()[0:4] and len(command) < 2
             )
@@ -871,11 +881,14 @@ def get_final_score(player: dict) -> dict:
     {"NAME": Jordan, "final_score": 3}
     """
 
+    # get sum player's scores
     final_score = sum([score for score in player["SCORECARD"].values() if str(score) != "scratch"])
 
+    # check for bonus in upper scorecard
     if is_bonus(player):
         final_score += FIXED_SCORES()["UPPER_BONUS"]
 
+    # return final score for player
     return {"NAME": player["NAME"], "final_score": final_score}
 
 
@@ -888,7 +901,10 @@ def get_winner(players_done: list) -> dict:
     :return: Winner of the game
     """
 
+    # get max score of all players
     max_score = max([player["final_score"] for player in players_done])
+
+    # extract the player with the highest score
     winner = [player for player in players_done if player["final_score"] == max_score]
 
     return winner[0]
