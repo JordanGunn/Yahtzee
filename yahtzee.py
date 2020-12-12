@@ -1,4 +1,5 @@
 import itertools
+import doctest
 import random
 import re
 
@@ -52,6 +53,7 @@ def HELP():
     """
 
     print(
+        '--------------------------------------------------------------------------------',
         f'[2]\t{VALID_INPUT()[0]} <num1> <num2> <num3> ...',
         'pluck dice from roll and place in "held dice"',
         '--------------------------------------------------------------------------------',
@@ -241,10 +243,10 @@ def roll_to_string(roll: list) -> str:
 
     Convert roll to string for regex searching.
 
-    :param roll:    a list of ints between 1 and 6 inclusive.
+    :param roll:    A list of ints between 1 and 6 inclusive.
     :precondition:  <roll> must be generated from roll_dice().
     :postcondition: Will generate a joined string of ints in roll.
-    :return:        roll as a string
+    :return:        <roll> as a string.
 
     """
 
@@ -280,8 +282,7 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     Check for multiple repeating die in a roll.
 
     Copied and adapted from lab06: Regex
-    Intended to be used to search for repetition of 3 or greater and
-    return points. If <repetition> == 5, and a match is successful,
+    If <repetition> == 5, and a match is successful,
     function will always return FIXED_SCORES()["YAHTZEE"].
 
     :param roll:         A list of random numbers
@@ -573,10 +574,21 @@ def is_valid_score(player: dict, key: str, score: int):
     """
     Determine if score is valid to display.
 
-    :param player: A yahtzee player object.
-    :param key: A key in a player's scorecard.
-    :param score: A score value
-    :return: True or False (bool).
+    :param player:  A yahtzee player object.
+    :param key:     A key in a player's scorecard.
+    :param score:   A score value.
+    :precondition:  Should only be used in get available_scores()
+    :postcondition: Will determine if score is availalable for submission.
+    :return:        True or False (bool).
+
+    >>> is_valid_score({"SCORECARD": {"ones": 1, "twos": 0, "yahtzee": 50}, "ones", 1)
+    False
+    >>> is_valid_score({"SCORECARD": {"ones": 1, "twos": 0, "yahtzee": 50}, "ones", 0)
+    False
+    >>> is_valid_score({"SCORECARD": {"ones": 0, "twos": 0, "yahtzee": 50}, "ones", 1)
+    True
+    >>> is_valid_score({"SCORECARD": {"ones": 0, "twos": 0, "yahtzee": 50}, "yahtzee", 50)
+    True
     """
 
     # check for valid scores to display
@@ -898,7 +910,15 @@ def get_winner(players_done: list) -> dict:
     Determine winner of the game.
 
     :param players_done: A list of player's who are done yahtzee.
-    :return: Winner of the game
+    :precondition:       <players_done> must be a list of dicts that
+                         passes is_player_done().
+    :postcondition:      Will get the winner of a yahtzee game.
+    :return:             Winner of the game
+
+    >>> [{"NAME": "Jordan", "final_score": 3}, {"NAME": "Jordan", "final_score": 2}]
+    {"NAME": "Jordan", "final_score": 3}
+    >>> [{"NAME": "Jordan", "final_score": 3}]
+    {"NAME": "Jordan", "final_score": 3}
     """
 
     # get max score of all players
@@ -920,6 +940,7 @@ def display_player_state(player: dict, roll: list, turn_number: int):
     :param turn_number: Player's turn number
     """
 
+    # print all player attributes
     print(f'TURN NUMBER: {turn_number + 1}')
     print("Current Score: ", get_final_score(player)["final_score"])
     print("Dice held: ", *player["HELD_DICE"])
@@ -930,6 +951,7 @@ def display_player_state(player: dict, roll: list, turn_number: int):
 
 def main():
     yahtzee()
+    doctest.testmod()
 
 
 if __name__ == "__main__":

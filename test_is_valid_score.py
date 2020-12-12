@@ -37,7 +37,7 @@ class TestIsValidScore(unittest.TestCase):
     def test_is_valid_score_yahtzee_field_filled(self):
 
         test_player = {"SCORECARD": {"ones": 0, "twos": 0, "yahtzee": 50}}
-        test_key = "ones"
+        test_key = "yahtzee"
         test_score = 50
 
         expected = True
