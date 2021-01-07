@@ -3,26 +3,6 @@ import random
 import re
 
 
-def YAHTZEE_SIGN():
-
-    print(
-        r"""       
-        \\  // 
-         \\//   
-          \/ 
-          ||   
-          ||       
-        """,
-        r"""      
-            /\  
-           //\\
-          //  \\
-         / ---- \
-        //      \\      
-        """
-    )
-
-
 def VALID_INPUT() -> list:
 
     """
