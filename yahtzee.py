@@ -1,10 +1,29 @@
 import itertools
-import doctest
 import random
 import re
 
 
-def VALID_INPUT():
+def YAHTZEE_SIGN():
+
+    print(
+        r"""       
+        \\  // 
+         \\//   
+          \/ 
+          ||   
+          ||       
+        """,
+        r"""      
+            /\  
+           //\\
+          //  \\
+         / ---- \
+        //      \\      
+        """
+    )
+
+
+def VALID_INPUT() -> list:
 
     """
     Return constant VALID_INPUT.
@@ -16,7 +35,29 @@ def VALID_INPUT():
     return ['pluck', 'remove', 'submit', 'scratch', 'help', 'quit', '']
 
 
-def MENU():
+def ASCII_DIE() -> dict:
+
+    """
+    Return ASCII DI constant.
+
+    To be used for render_die
+
+    :return: ascii die (dict)
+    """
+
+    ascii_die = {
+        1: "|   |\n| * |\n|   |",
+        2: "|*  |\n|   |\n|  *|",
+        3: "|*  |\n| * |\n|  *|",
+        4: "|* *|\n|   |\n|* *|",
+        5: "|* *|\n| * |\n|* *|",
+        6: "|* *|\n|* *|\n|* *|"
+    }
+
+    return ascii_die
+
+
+def MENU() -> str:
 
     """
     Print constant MENU.
@@ -30,12 +71,12 @@ def MENU():
     print(
         '====================================================',
         'Press "enter" to roll or choose from the following options:\n',
-        f'[1] "{VALID_INPUT()[0]}"\tPluck dice from roll.',
+        f'[1] "{VALID_INPUT()[0]}"\t\tPluck dice from roll.',
         f'[2] "{VALID_INPUT()[1]}"\tRemove held dice.',
         f'[3] "{VALID_INPUT()[2]}"\tSubmit score.',
         f'[4] "{VALID_INPUT()[3]}"\tScratch score.',
-        f'[5] "{VALID_INPUT()[4]}"\tSee usage examples.',
-        f'[6] "{VALID_INPUT()[5]}"\tQuit the game.',
+        f'[5] "{VALID_INPUT()[4]}"\t\tSee usage examples.',
+        f'[6] "{VALID_INPUT()[5]}"\t\tQuit the game.',
         '====================================================',
         sep="\n",
         end="\n"
@@ -54,7 +95,7 @@ def HELP():
 
     print(
         '--------------------------------------------------------------------------------',
-        f'[2]\t{VALID_INPUT()[0]} <num1> <num2> <num3> ...',
+        f'[1]\t{VALID_INPUT()[0]} <num1> <num2> <num3> ...',
         'pluck dice from roll and place in "held dice"',
         '--------------------------------------------------------------------------------',
         '\t\t USAGE EXAMPLES --->',
@@ -66,14 +107,23 @@ def HELP():
         '\t\t USAGE EXAMPLES --->',
         '\t\t >>> remove 3 3 3 \n',
         '--------------------------------------------------------------------------------',
-        f'[2]\t{VALID_INPUT()[2]} <field>',
+        f'[3]\t{VALID_INPUT()[2]} <field>',
         "Submit score from available fields",
         '--------------------------------------------------------------------------------',
         '\t\t USAGE EXAMPLES --->',
         '\t\t >>> submit twos',
         '\t\t >>> submit three of a kind \n',
+        '--------------------------------------------------------------------------------',
+        f'[4]\t{VALID_INPUT()[3]} <field>',
+        "Scratch score, removing it from available fields",
+        '--------------------------------------------------------------------------------',
+        '\t\t USAGE EXAMPLES --->',
+        '\t\t >>> scratch twos',
+        '\t\t >>> scratch three of a kind \n',
         sep="\n"
     )
+
+    input("Press enter to continue...")
 
 
 def DIE() -> list:
@@ -167,11 +217,34 @@ def start_game():
         number_of_players = input("How many players?:\t")
 
     # generate yahtzee player objects
-    for player in range(1, int(number_of_players) + 1):
-        name = input(f'What is the name of player {player}?:\t')
+    for player_number in range(1, int(number_of_players) + 1):
+        name = input(f'What is the name of player {player_number}?:\t')
         players.append(create_player(name))
 
     return players
+
+
+def render_die(roll: list):
+
+    """
+    Render ascii die.
+
+    :param roll: A list of random ints between 1 and 6.
+    """
+
+    # get ascii die for roll
+    rolled_die = [ASCII_DIE()[die] for die in roll]
+
+    # get the top middle and bottom of line of dice
+    top = [die.split("\n")[0] for die in rolled_die]
+    middle = [die.split("\n")[1] for die in rolled_die]
+    bottom = [die.split("\n")[2] for die in rolled_die]
+
+    # render if dice in roll
+    if len(rolled_die) > 0:
+        # render the dice
+        for dice_row in [top, middle, bottom]:
+            print(*dice_row, sep="\t")
 
 
 def run_command(command: list, player: dict, roll: list):
@@ -288,15 +361,8 @@ def check_multiple_die(roll: list, repetition: int) -> int:
     :param roll:         A list of random numbers
     :param repetition:   The repeated value to search for.
     :precondition:       <roll> must be a list of sorted ints between 1 and 6.
-    :postcondition:      Perform pattern recognition to detect multiple repeating die
+    :postcondition:      Perform pattern recognition to detect multiple repeating die.
     :return:             Points.
-
-    >>> check_multiple_die([3, 3, 3, 2, 1], 3)
-    12
-    >>> check_multiple_die([1, 2, 3, 4, 5], 3)
-    0
-    >>> check_multiple_die([5, 5, 5, 5, 5], 5)
-    50
     """
 
     # convert list to string
@@ -331,12 +397,6 @@ def check_small_straight(roll: list) -> int:
     :precondition:  <roll> must be a list of sorted ints between 1 and 6.
     :postcondition: Perform pattern recognition to for a small straight.
     :return:        Points.
-    >>> check_small_straight([1, 2, 3, 4, 6])
-    30
-    >>> check_small_straight([1, 2, 3, 4, 5])
-    30
-    >>> check_small_straight([1, 3, 5, 6, 3])
-    0
     """
 
     # get min, max from roll
@@ -385,13 +445,6 @@ def check_large_straight(roll: list) -> int:
     :precondition:  <roll> must be a list of sroted ints between 1 and 6.
     :postcondition: Will perform pattern recognition for a large straight.
     :return:        Points.
-
-    >>> check_large_straight([1, 2, 3, 4, 6])
-    0
-    >>> check_large_straight([1, 2, 3, 4, 5])
-    40
-    >>> check_large_straight([1, 3, 5, 6, 3])
-    0
     """
 
     # cast to string and sort for good measure
@@ -424,15 +477,6 @@ def check_number(roll: list, value: int) -> int:
     :precondition:  <roll> must be a list of sorted ints between 1 and 6.
     :postcondition: Perform pattern recognition for any instance of <value>
     :return:        Points.
-
-    >>> check_number([5, 5, 5, 2, 2], 5)
-    15
-    >>> check_number([5, 2, 2, 2, 2], 5)
-    5
-    >>> check_number([2, 2, 2, 2, 2], 5)
-    0
-    >>> check_number([2, 2, 2, 2, 2], 2)
-    10
     """
 
     # cast to string and sort for good measure
@@ -466,13 +510,6 @@ def check_full_house(roll: list) -> int:
     :precondition:  <roll> must be a list of sorted ints between 1 and 6.
     :postcondition: Perform pattern recognition to detect a full house.
     :return:        Points.
-
-    >>> check_full_house([2, 2, 2, 3, 3])
-    25
-    >>> check_full_house([2, 2, 3, 3, 3])
-    25
-    >>> check_full_house([2, 2, 2, 2, 3])
-    0
     """
 
     # cast to string and sort for good measure
@@ -514,13 +551,6 @@ def get_available_scores(roll: list, player: dict, scratch=False) -> dict:
     :postcondition: Will perform pattern recognition
                     to detect a full house in a roll.
     :return:        Available scores.
-
-    >>> get_available_scores([5, 5, 5, 5, 5], {"NAME": "Jordan", "HELD_DICE": [], "SCORECARD": {"yahtzee": 0}})
-    {"yahtzee": 50}
-    >>> get_available_scores([5, 5, 5], {"NAME": "Jordan", "HELD_DICE": [5, 5], "SCORECARD": {"yahtzee": 0}})
-    {"yahtzee": 50}
-    >>> get_available_scores([], {"NAME": "Jordan", "HELD_DICE": [5, 5, 5, 5, 5], "SCORECARD": {"yahtzee": 0}})
-    {"yahtzee": 50}
     """
 
     # calculate all available scores
@@ -580,15 +610,6 @@ def is_valid_score(player: dict, key: str, score: int):
     :precondition:  Should only be used in get available_scores()
     :postcondition: Will determine if score is availalable for submission.
     :return:        True or False (bool).
-
-    >>> is_valid_score({"SCORECARD": {"ones": 1, "twos": 0, "yahtzee": 50}, "ones", 1)
-    False
-    >>> is_valid_score({"SCORECARD": {"ones": 1, "twos": 0, "yahtzee": 50}, "ones", 0)
-    False
-    >>> is_valid_score({"SCORECARD": {"ones": 0, "twos": 0, "yahtzee": 50}, "ones", 1)
-    True
-    >>> is_valid_score({"SCORECARD": {"ones": 0, "twos": 0, "yahtzee": 50}, "yahtzee", 50)
-    True
     """
 
     # check for valid scores to display
@@ -657,13 +678,6 @@ def format_user_input(command_string: str) -> list:
     :precondition:         Input must be a string
     :postcondition:        Will format string as a yahtzee command.
     :return:               A command and a list of args.
-
-    >>> format_user_input("pluck 2 2")
-    ["pluck", "2 2 2"]
-    >>> format_user_input("")
-    [""]
-    >>> format_user_input("submit ones")
-    ["submit", "ones"]
     """
 
     # parse the command line input
@@ -689,13 +703,10 @@ def pluck_dice(player: dict, roll: list, desired_dice: str):
 
     # convert desired dice to list of ints
     dice = list(roll_to_string(roll))
-    #
     desired_dice_list = sorted(desired_dice.split(" "))
 
     # pluck dice from rolled dice
-    plucked = [
-        int(dice.pop(dice.index(die))) for die in desired_dice_list if die in dice
-    ]
+    plucked = [int(dice.pop(dice.index(die))) for die in desired_dice_list if die in dice]
 
     [roll.remove(pluck) for pluck in plucked]
 
@@ -737,13 +748,6 @@ def is_turn_over(command: list) -> bool:
     :precondition:      <command> must be ouput of format_user_input()
     :postcondition:     Will decide whether to end player's turn.
     :return:            True or False (bool)
-
-    >>> is_turn_over(["submit", "ones"])
-    True
-    >>> is_turn_over(["scratch", "ones"])
-    True
-    >>> is_turn_over(["fake"])
-    False
     """
 
     turn_over = (
@@ -765,15 +769,6 @@ def is_invalid_syntax(command: list) -> bool:
     :precondition:  <command> must be output from format_user_input().
     :postcondition: Will check for invalid commands or syntax.
     :return:        True or False (bool)
-
-    >>> is_invalid_syntax(["pluck", "2", "2"])
-    True
-    >>> is_invalid_syntax(["pluck", "2 2"])
-    False
-    >>> is_invalid_syntax(["pluck"])
-    True
-    >>> is_invalid_syntax(["fake"])
-    True
     """
 
     # check for incorrect arg length and valid commands for program
@@ -820,13 +815,6 @@ def is_bonus(player: dict) -> bool:
     :precondition:  Player must be a yahtzee player object.
     :postcondition: Will decide whether player should receive score bonus.
     :return:        True or False (bool).
-
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 63}})
-    True
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 62}})
-    False
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 33, "twos": 33}})
-    True
     """
 
     # get the index of last item in upper card
@@ -853,11 +841,6 @@ def is_player_done(player: dict) -> bool:
     :precondition:  <player> must be a yahtzee player object.
     :postcondition: Will decide whether to pull a player from the game.
     :return:        True or False.
-
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 63}})
-    True
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 33, "twos": 0}})
-    False
     """
 
     # start counter for filled scorecard fields
@@ -884,13 +867,6 @@ def get_final_score(player: dict) -> dict:
     :precondition:  <player> must be a yahtzee player object.
     :postcondition: Will return players total score.
     :return:        Final score (name & score).
-
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 63}})
-    {"NAME": Jordan, "final_score": 63}
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 33, "twos": 0}})
-    {"NAME": Jordan, "final_score": 33}
-    >>> is_bonus({"NAME": "Jordan", "SCORECARD": {"ones": 1, "twos": 2}})
-    {"NAME": Jordan, "final_score": 3}
     """
 
     # get sum player's scores
@@ -915,11 +891,6 @@ def get_winner(players_done: list) -> dict:
                          passes is_player_done().
     :postcondition:      Will get the winner of a yahtzee game.
     :return:             Winner of the game
-
-    >>> [{"NAME": "Jordan", "final_score": 3}, {"NAME": "Jordan", "final_score": 2}]
-    {"NAME": "Jordan", "final_score": 3}
-    >>> [{"NAME": "Jordan", "final_score": 3}]
-    {"NAME": "Jordan", "final_score": 3}
     """
 
     # get max score of all players
@@ -942,17 +913,18 @@ def display_player_state(player: dict, roll: list, turn_number: int):
     """
 
     # print all player attributes
-    print(f'TURN NUMBER: {turn_number + 1}')
+    print(f'Turn Number: {turn_number + 1}')
     print("Current Score: ", get_final_score(player)["final_score"])
-    print("Dice held: ", *player["HELD_DICE"])
-    print("Dice rolled: ", *roll)
     print("Available Scores: ", get_available_scores(roll, player), sep="")
-    print("Remaining Scores: ", *get_available_scores(roll, player, scratch=True), sep=" | ")
+    print("Remaining Scores: ", *get_available_scores(roll, player, scratch=True), sep="   ")
+    print("============= Dice Held =============", )
+    render_die(player["HELD_DICE"])
+    print("============ Dice Rolled ============")
+    render_die(roll)
 
 
 def main():
     yahtzee()
-    doctest.testmod()
 
 
 if __name__ == "__main__":
